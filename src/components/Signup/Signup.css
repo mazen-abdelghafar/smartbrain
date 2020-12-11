@@ -1,0 +1,22 @@
+article.articleSignup {
+  width: 400px;
+  position: relative;
+  box-shadow: 0px 0px 25px 0px #555;
+}
+
+div.SignupBg {
+  background-color: #222;
+  background-image: radial-gradient(rgb(87 80 105) 5%, transparent 16%),
+    radial-gradient(rgb(91 115 69) 5%, transparent 16%);
+  background-size: 50px 50px;
+  background-position: 0 0, 30px 30px;
+  filter: blur(5px);
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+main.mainSignup input {
+  color: white;
+}
