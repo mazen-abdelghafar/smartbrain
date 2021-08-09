@@ -28,14 +28,17 @@ class Profile extends Component {
   };
 
   onProfileUpdate = (data) => {
-    fetch(`http://localhost:3001/profile/${this.props.user.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: window.sessionStorage.getItem("token"),
-      },
-      body: JSON.stringify({ formInput: data }),
-    })
+    fetch(
+      `https://peaceful-refuge-50521.herokuapp.com/profile/${this.props.user.id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: window.sessionStorage.getItem("token"),
+        },
+        body: JSON.stringify({ formInput: data }),
+      }
+    )
       .then((resp) => {
         if (resp.status === 200 || resp.status === 304) {
           this.props.toggleModal();
