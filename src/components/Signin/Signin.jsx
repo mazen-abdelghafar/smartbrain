@@ -35,13 +35,16 @@ class Signin extends Component {
       .then((data) => {
         if (data.userId && data.success === "true") {
           this.saveAuthTokenInSession(data.token);
-          fetch(`http://localhost:3001/profile/${data.userId}`, {
-            method: "get",
-            headers: {
-              "content-type": "application/json",
-              authorization: data.token,
-            },
-          })
+          fetch(
+            `https://peaceful-refuge-50521.herokuapp.com/profile/${data.userId}`,
+            {
+              method: "get",
+              headers: {
+                "content-type": "application/json",
+                authorization: data.token,
+              },
+            }
+          )
             .then((resp) => resp.json())
             .then((user) => {
               if (user && user.email) {

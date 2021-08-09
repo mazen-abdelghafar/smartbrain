@@ -41,7 +41,7 @@ class App extends Component {
   componentDidMount() {
     const token = window.sessionStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:3001/signin", {
+      fetch("https://peaceful-refuge-50521.herokuapp.com/signin", {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -114,7 +114,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input }, () => {
-      fetch("http://localhost:3001/imageurl", {
+      fetch("https://peaceful-refuge-50521.herokuapp.com/imageurl", {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -128,7 +128,7 @@ class App extends Component {
         .then((response) => {
           this.displayFaceBox(this.calculateFaceLocation(response));
 
-          fetch("http://localhost:3001/image", {
+          fetch("https://peaceful-refuge-50521.herokuapp.com/image", {
             method: "put",
             headers: {
               "content-type": "application/json",
