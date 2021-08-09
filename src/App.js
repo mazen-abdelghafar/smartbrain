@@ -51,13 +51,16 @@ class App extends Component {
         .then((resp) => resp.json())
         .then((data) => {
           if (data && data.id) {
-            fetch(`http://localhost:3001/profile/${data.id}`, {
-              method: "get",
-              headers: {
-                "content-type": "application/json",
-                authorization: token,
-              },
-            })
+            fetch(
+              `https://peaceful-refuge-50521.herokuapp.com/profile/${data.id}`,
+              {
+                method: "get",
+                headers: {
+                  "content-type": "application/json",
+                  authorization: token,
+                },
+              }
+            )
               .then((resp) => resp.json())
               .then((user) => {
                 if (user && user.email) {
