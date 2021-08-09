@@ -4,7 +4,7 @@ import "./Logo.css";
 
 const Logo = () => {
   return (
-    <div style={{ width: "75px" }}>
+    <div style={{ width: "82px" }}>
       <img src={brain} alt="brain logo" />
     </div>
   );

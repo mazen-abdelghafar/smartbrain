@@ -7,3 +7,9 @@ nav {
 nav p {
   margin-top: 10px;
 }
+
+@media only screen and (min-width: 350px) {
+  nav {
+    width: 80%;
+  }
+}

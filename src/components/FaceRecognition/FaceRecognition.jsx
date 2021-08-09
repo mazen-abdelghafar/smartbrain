@@ -4,19 +4,21 @@ import "./FaceRecognition.css";
 
 const FaceRecognition = ({ imageUrl, box }) => {
   let boxes = [];
-  for (let i = 0; i < box.length; i++) {
-    boxes.push(
-      <div
-        key={i}
-        className="bounding-box"
-        style={{
-          top: box[i].topRow,
-          right: box[i].rightCol,
-          bottom: box[i].bottomRow,
-          left: box[i].leftCol,
-        }}
-      ></div>
-    );
+  if (box) {
+    for (let i = 0; i < box.length; i++) {
+      boxes.push(
+        <div
+          key={i}
+          className="bounding-box"
+          style={{
+            top: box[i].topRow,
+            right: box[i].rightCol,
+            bottom: box[i].bottomRow,
+            left: box[i].leftCol,
+          }}
+        ></div>
+      );
+    }
   }
 
   return (

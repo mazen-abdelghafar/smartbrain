@@ -24,7 +24,7 @@ class Signun extends Component {
   };
 
   onSubmitSignUp = () => {
-    fetch("https://peaceful-refuge-50521.herokuapp.com/signup", {
+    fetch("http://localhost:3001/signup", {
       method: "post",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

@@ -2,13 +2,13 @@
   box-shadow: 0px 0px 15px 0px #555;
 }
 
-div.imageLinkForm input {
+.imageLink input {
   border: none;
   outline: none;
   border-radius: 50px 0 0 50px;
 }
 
-div.imageLinkForm button {
+.imageLink button {
   border: none;
   outline: none !important;
   color: #f7f7f7;
@@ -19,7 +19,7 @@ p.italic {
   font-style: italic;
 }
 
-div.imageLink {
+.imageLinkBg {
   background-color: #222;
   background-image: radial-gradient(rgb(87 80 105) 5%, transparent 16%),
     radial-gradient(rgb(91 115 69) 5%, transparent 16%);
@@ -31,4 +31,74 @@ div.imageLink {
   z-index: -1;
   width: 100%;
   height: 100%;
+}
+
+@media only screen and (min-width: 350px) {
+  .imageLink {
+    width: 90%;
+    margin: auto;
+  }
+
+  .pa4 {
+    padding: 1.5rem 1rem 1rem 1rem;
+  }
+
+  .imageLink input {
+    border-radius: 50px;
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .imageLink button {
+    border-radius: 50px;
+    width: 50%;
+  }
+}
+
+@media only screen and (min-width: 481px) {
+  .imageLinkForm {
+    width: 85%;
+  }
+
+  .imageLinkForm button {
+    font-size: 16px;
+    padding: 11px 0px;
+  }
+
+  .pa4 {
+    padding: 2rem;
+  }
+
+  .imageLink input {
+    border-radius: 50px 0 0 50px;
+    display: inline;
+    width: 70%;
+  }
+
+  .imageLink button {
+    border-radius: 0 50px 50px 0;
+    width: 30%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .imageLinkForm {
+    width: 70%;
+  }
+
+  .imageLinkForm button {
+    font-size: 18px;
+    padding: 10px 0px;
+  }
+}
+
+@media only screen and (min-width: 1080px) {
+  .imageLinkForm {
+    width: 50%;
+  }
+
+  .imageLinkForm button {
+    padding: 9px 0px;
+  }
 }

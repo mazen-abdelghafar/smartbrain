@@ -18,8 +18,12 @@ class Signin extends Component {
     this.setState({ signInPassword: event.target.value });
   };
 
+  saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem("token", token);
+  };
+
   onSubmitSignIn = () => {
-    fetch("https://peaceful-refuge-50521.herokuapp.com/signin", {
+    fetch("http://localhost:3001/signin", {
       method: "post",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -28,12 +32,26 @@ class Signin extends Component {
       }),
     })
       .then((response) => response.json())
-      .then((user) => {
-        if (user.id) {
-          this.props.loadUser(user);
-          this.props.onRouteChange("home");
+      .then((data) => {
+        if (data.userId && data.success === "true") {
+          this.saveAuthTokenInSession(data.token);
+          fetch(`http://localhost:3001/profile/${data.userId}`, {
+            method: "get",
+            headers: {
+              "content-type": "application/json",
+              authorization: data.token,
+            },
+          })
+            .then((resp) => resp.json())
+            .then((user) => {
+              if (user && user.email) {
+                this.props.loadUser(user);
+                this.props.onRouteChange("home");
+              }
+            });
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   render() {

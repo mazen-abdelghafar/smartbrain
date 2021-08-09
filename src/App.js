@@ -5,6 +5,8 @@ import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Signup from "./components/Signup/Signup";
+import Modal from "./components/Modal/Modal";
+import Profile from "./components/Profile/Profile";
 import BgParticles from "./components/BgParticles/BgParticles";
 
 import "./App.css";
@@ -16,12 +18,17 @@ const initialState = {
   box: [],
   route: "signin",
   isSignedIn: false,
+  // route: "home",
+  // isSignedIn: true,
+  isProfileOpen: false,
   user: {
     id: "",
     name: "",
     email: "",
     entries: 0,
     joined: "",
+    age: "",
+    pet: "",
   },
 };
 
@@ -29,6 +36,39 @@ class App extends Component {
   constructor() {
     super();
     this.state = initialState;
+  }
+
+  componentDidMount() {
+    const token = window.sessionStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:3001/signin", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+          authorization: token,
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (data && data.id) {
+            fetch(`http://localhost:3001/profile/${data.id}`, {
+              method: "get",
+              headers: {
+                "content-type": "application/json",
+                authorization: token,
+              },
+            })
+              .then((resp) => resp.json())
+              .then((user) => {
+                if (user && user.email) {
+                  this.loadUser(user);
+                  this.onRouteChange("home");
+                }
+              });
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   loadUser = (data) => {
@@ -44,20 +84,24 @@ class App extends Component {
   };
 
   calculateFaceLocation = (data) => {
-    const image = document.getElementById("inputImage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-    let box = [];
-    for (let i = 0; i < data.outputs[0].data.regions.length; i++) {
-      const boxArea = data.outputs[0].data.regions[i].region_info.bounding_box;
-      box.push({
-        leftCol: boxArea.left_col * width,
-        topRow: boxArea.top_row * height,
-        rightCol: width - boxArea.right_col * width,
-        bottomRow: height - boxArea.bottom_row * height,
-      });
+    if (data && data.outputs) {
+      const image = document.getElementById("inputImage");
+      const width = Number(image.width);
+      const height = Number(image.height);
+      let box = [];
+      for (let i = 0; i < data.outputs[0].data.regions.length; i++) {
+        const boxArea =
+          data.outputs[0].data.regions[i].region_info.bounding_box;
+        box.push({
+          leftCol: boxArea.left_col * width,
+          topRow: boxArea.top_row * height,
+          rightCol: width - boxArea.right_col * width,
+          bottomRow: height - boxArea.bottom_row * height,
+        });
+      }
+      return box;
     }
-    return box;
+    return;
   };
 
   displayFaceBox = (box) => {
@@ -70,9 +114,12 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input }, () => {
-      fetch("https://peaceful-refuge-50521.herokuapp.com/imageurl", {
+      fetch("http://localhost:3001/imageurl", {
         method: "post",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: window.sessionStorage.getItem("token"),
+        },
         body: JSON.stringify({
           input: this.state.input,
         }),
@@ -81,9 +128,12 @@ class App extends Component {
         .then((response) => {
           this.displayFaceBox(this.calculateFaceLocation(response));
 
-          fetch("https://peaceful-refuge-50521.herokuapp.com/image", {
+          fetch("http://localhost:3001/image", {
             method: "put",
-            headers: { "content-type": "application/json" },
+            headers: {
+              "content-type": "application/json",
+              authorization: window.sessionStorage.getItem("token"),
+            },
             body: JSON.stringify({
               id: this.state.user.id,
             }),
@@ -107,7 +157,16 @@ class App extends Component {
     this.setState({ route: route });
   };
 
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen,
+    }));
+  };
+
   render() {
+    const { isProfileOpen, user } = this.state;
+
     return (
       <div className="App">
         <BgParticles />
@@ -115,7 +174,18 @@ class App extends Component {
           route={this.state.route}
           onRouteChange={this.onRouteChange}
           isSignedIn={this.state.isSignedIn}
+          toggleModal={this.toggleModal}
         />
+        {isProfileOpen && (
+          <Modal>
+            <Profile
+              isProfileOpen={isProfileOpen}
+              toggleModal={this.toggleModal}
+              user={user}
+              loadUser={this.loadUser}
+            />
+          </Modal>
+        )}
         <div className="body-content">
           {this.state.route === "home" ? (
             <Fragment>
